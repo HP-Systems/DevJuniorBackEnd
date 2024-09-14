@@ -83,7 +83,7 @@ class UsersController extends Controller
                 ], 200
             );
         } catch (\Exception $e) {
-            Log::error('Exception during registrarEstudiante: ' . $e->getMessage());
+            Log::error('Exception during register: ' . $e->getMessage());
             return response()->json(
                 [
                     'status' => 500,
@@ -93,6 +93,73 @@ class UsersController extends Controller
                 ], 500
             );
         }
+    }
+
+    public function login(Request $request){
+        try{
+            $validate = Validator::make(
+                $request->all(),
+                [
+                    "email" => "required | email",
+                    "password" => "required",
+                ]
+            );
+
+            if ($validate->fails()) {
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'data' => [],
+                        'msg' => 'Error de validación',
+                        'error' => $validate->errors()
+                    ], 400
+                );
+            }
+
+            $user = User::where('email', $request->email)->first();
+            if(!$user || (!Hash::check($request->password, $user->password))){
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'data' => [],
+                        'msg' => 'Los datos son incorrectos. Inténtalo de nuevo.',
+                        'error' => []
+                    ], 404
+                );
+            }
+
+            if($user->status == 0){
+                return response()->json(
+                    [
+                        'status' => 403,
+                        'data' => [],
+                        'msg' => 'Cuenta desactivada. Contacta al administrador.',
+                        'error' => []
+                    ], 403
+                );
+            }
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $user,
+                    'msg' => 'Usuario logueado con exito.',
+                    'error' => []
+                ], 200
+            );
+
+        } catch (\Exception $e) {
+            Log::error('Exception during login: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
+
     }
 
 
