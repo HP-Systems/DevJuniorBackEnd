@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('apellido');
+            $table->string('telefono');
             $table->date('fecha_nacimiento');
             $table->string('universidad');
-            $table->integer('clave_estudiante');
+            $table->integer('clave_estudiante'); 
             $table->string('periodo');
             $table->integer('n_periodo');
             $table->string('foto_credencial');
