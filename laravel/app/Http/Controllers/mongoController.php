@@ -120,17 +120,13 @@ class mongoController extends Controller
         foreach ($collection as $dato) {
             if ($dato->estudiante_id == $id) {
                 
-                //regresa la propuesta con el proyecto
-                
                 $propuesta = Propuesta::where('id_mongo', $dato->id)->first();
                 if ($propuesta) {
-                    dd($propuesta);
-                    $proyecto = Proyecto::find($propuesta->proyecto_id);
-                    dd($proyecto);
                     $dato->etapa = $propuesta->etapa;
-                    $dato->proyecto = $proyecto;
                 }
+
                 $matchingDocuments[] = $dato;
+                dd($matchingDocuments);
             }
         }
         if (empty($matchingDocuments)) {
