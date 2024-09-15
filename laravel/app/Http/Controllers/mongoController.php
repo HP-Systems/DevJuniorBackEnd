@@ -48,13 +48,13 @@ class mongoController extends Controller
                         [
                             'status' => 400,
                             'data' => [],
-                            'msg' => 'Ya existe una propuesta para este proyecto',
+                            'msg' => 'Ya existe una propuesta tuya para este proyecto',
                         ],
                         400
                     );
                 }
             }
-            
+
             if ($validator->fails()) {
                 return response()->json(
                     [
