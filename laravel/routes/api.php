@@ -23,9 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [UsersController::class, 'register']);
 Route::post('/login', [UsersController::class, 'login']);
-
 Route::get('/mongo', [mongoController::class, 'mongoConection']);
-
 
 Route::get('/proyectos', [ProyectosController::class, 'obtenerProyectos']);
 Route::post('/proyecto/create', [ProyectosController::class, 'crearProyecto']);
