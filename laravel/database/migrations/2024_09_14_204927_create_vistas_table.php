@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('vistas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('proyecto_id');
+            $table->unsignedBigInteger('propuesta_id');
             $table->text('URL_imagenes');
             $table->date('fecha_envio');
             $table->text('descripcion');
 
-            $table->foreign('proyecto_id')->references('id')->on('proyectos');
+            $table->foreign('propuesta_id')->references('id')->on('propuestas');
             $table->timestamps();
         });
     }

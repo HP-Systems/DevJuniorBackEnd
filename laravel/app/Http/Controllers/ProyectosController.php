@@ -14,11 +14,10 @@ class ProyectosController extends Controller
     public function obtenerProyectos(){
         try {
             $hoy = Carbon::now('America/Monterrey')->toDateString();
-    
 
             // Realizar la consulta para obtener los proyectos
             $proyectos = Proyecto::where('fecha_creacion', '<=', $hoy)
-                ->where('fecha_limite', '>=', $hoy)
+                ->where('fecha_limite', '>=', $hoy) 
                 ->where('status', 1)
                 ->get();
 

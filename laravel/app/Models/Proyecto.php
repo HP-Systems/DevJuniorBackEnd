@@ -27,12 +27,6 @@ class Proyecto extends Model
 
     public function propuesta()
     {
-        return $this->hasMany(Propuesta::class, 'proyecto_id');
-    }
-
-
-    public function vista()
-    {
-        return $this->hasMany(Vista::class, 'proyecto_id');
+        return $this->hasMany(Propuesta::class, 'propuesta_id');
     }
 }

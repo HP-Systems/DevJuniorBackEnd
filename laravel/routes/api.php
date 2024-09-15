@@ -30,3 +30,4 @@ Route::post('/proyecto/create', [ProyectosController::class, 'crearProyecto']);
 Route::put('/proyecto/edit/{id}', [ProyectosController::class, 'editarProyecto']);
 Route::put('/proyecto/status/{id}', [ProyectosController::class, 'cambiarStatusProyecto']);
 
+

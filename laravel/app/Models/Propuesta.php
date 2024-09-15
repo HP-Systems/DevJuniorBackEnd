@@ -30,5 +30,10 @@ class Propuesta extends Model
         return $this->belongsTo(Proyecto::class, 'proyecto_id');
     }
 
+    public function vista()
+    {
+        return $this->hasMany(Vista::class, 'proyecto_id');
+    }
+
     
 }

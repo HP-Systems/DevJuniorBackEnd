@@ -12,15 +12,15 @@ class Vista extends Model
     protected $table = 'vistas';
 
     protected $fillable = [
-        'proyecto_id',
+        'propuesta_id',
         'URL_imagenes',
         'fecha_envio',
         'descripcion'
     ];
 
 
-    public function proyecto()
+    public function propuesta()
     {
-        return $this->belongsTo(Proyecto::class, 'proyecto_id');
+        return $this->belongsTo(Proyecto::class, 'propuesta_id');
     }
 }
