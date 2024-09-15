@@ -31,3 +31,12 @@ Route::put('/proyecto/edit/{id}', [ProyectosController::class, 'editarProyecto']
 Route::put('/proyecto/status/{id}', [ProyectosController::class, 'cambiarStatusProyecto']);
 
 
+
+
+Route::post('/proyecto/seleccion', [mongoController::class, 'sleccionarProyecto']);
+Route::get('/proyectos/historial/{id}', [mongoController::class, 'historial']);
+Route::post('/proyectos/vistas', [mongoController::class, 'subirVistas']);
+
+Route::get('/propuestas/{id}', [mongoController::class, 'getPropuestas']);
+Route::post('/propuesta/etapa', [mongoController::class, 'etapasPropuestas']);
+Route::post('/propuesta/cancelacion', [mongoController::class, 'cancelarPropuesta']);
