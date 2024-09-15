@@ -40,5 +40,6 @@ Route::get('/proyectos/historial/{id}', [mongoController::class, 'historial']);
 Route::post('/proyectos/vistas', [mongoController::class, 'subirVistas']);
 
 Route::get('/propuestas/{id}', [mongoController::class, 'getPropuestas']);
+Route::get('/propuesta/aceptada/{id}', [mongoController::class, 'getPropuestasAceptadas']);
 Route::post('/propuesta/etapa', [mongoController::class, 'etapasPropuestas']);
 Route::post('/propuesta/cancelacion', [mongoController::class, 'cancelarPropuesta']);

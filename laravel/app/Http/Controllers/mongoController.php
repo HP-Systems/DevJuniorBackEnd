@@ -199,7 +199,7 @@ class mongoController extends Controller
     }}
 
     //admin
-    public function getPropuestas($id_proyecto){
+    public function getPropuestasAceptadas($id_proyecto){
         try {
             $collection = DB::connection('mongodb')->table('Propuestas')->get();
             $cursor = null;
@@ -212,8 +212,7 @@ class mongoController extends Controller
                 }
             }
 
-            $propuestaFinal  = null;
-            $propuestaFinal = $arrayPropuestas;
+            $propuestaFinal = [];
             $propuestaSeleccionada = [];
 
             foreach($arrayPropuestas as $propuesta){
@@ -236,58 +235,6 @@ class mongoController extends Controller
                 'data' => $data,
                 'msg' => 'Propuestas obtenidas exitosamente.',
             ], 200);
-
-            //por cada propuesta
-            /*foreach ($collection as $dato) {
-                //buscar la propuesta que pertenece al proyecto 
-                if ($dato->proyecto_id == $id_proyecto) {
-
-                    //buscar la propuesta que no este pendiente y este activa
-                    //la propuesta fue asignada a a un proyecto ya 
-                    if($dato->etapa != 0 && $dato->status == 1){
-                        $cursor = $dato;
-                        break;
-                    }
-
-                    //la propuesta esta pendiente y activa
-                    if($dato->etapa == 0 && $dato->status == 1){
-                        $cursor = $dato;
-                        break;
-                    }
-                }
-            }
-            
-            if ($cursor->etapa == 1) {
-                // Retorna la propuesta con la vista
-                $propuesta = $cursor;
-                $vista = DB::connection('mongodb')->table('Vistas')->get();
-                foreach ($vista as $dato) {
-                    if ($dato->id_propuesta == $propuesta->id) {
-                        $propuesta->vista = $dato;
-                        break;
-                    }
-                }
-                    
-    
-                return response()->json(
-                    [
-                        'status' => 200,
-                        'data' => $propuesta,
-                        'msg' => 'Propuesta con vista encontrada',
-                    ],
-                    200
-                );
-            }
-    
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $cursor,
-                    'msg' => 'Propuestas encontradas',
-                ],
-                200
-            );
-            */
         } catch (\Exception $e) {
             Log::error('Exception during getPropuestas: ' . $e->getMessage());
             return response()->json(
@@ -301,6 +248,39 @@ class mongoController extends Controller
             );
         }
     }
+
+    public function getPropuesta($id_proyecto){
+        try {
+            $collection = DB::connection('mongodb')->table('Propuestas')->get();
+            $cursor = null;
+            $arrayPropuestas = [];
+
+            foreach ($collection as $propuesta) {
+                //buscar propuestas del proyecto
+                if ($propuesta->proyecto_id == $id_proyecto && $propuesta->status == 1) {
+                    $arrayPropuestas[] = $propuesta;
+                }
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $arrayPropuestas,
+                'msg' => 'Propuestas obtenidas exitosamente.',
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Exception during getPropuestas: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error al obtener las propuestas.',
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function etapasPropuestas(Request $request)
     {
         try{
