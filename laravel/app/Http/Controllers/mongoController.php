@@ -101,16 +101,9 @@ class mongoController extends Controller
         try{
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')
-            ->where('estudiante_id', $estudiante_id)->where('status', 1)->get();
+            ->where('estudiante_id', $estudiante_id)->where('status', 1)->first();
 
-        return response()->json(
-            [
-                'status' => 200,
-                'data' => $collection,
-                'msg' => 'Historial de propuestas',
-            ],
-            200
-        );
+        
         if ($collection->isEmpty()) {
             $hoy = Carbon::now('America/Monterrey')->toDateString();
 
@@ -246,7 +239,7 @@ class mongoController extends Controller
                 ->where('id_proyecto', $id_proyecto)
                 ->where('etapa', '!=', 0)
                 ->where('status', 1)
-                ->get();
+                ->first();
     
             if ($collection->isEmpty()) {
                 $collection = DB::connection('mongodb')->table('Propuestas')
@@ -328,8 +321,13 @@ class mongoController extends Controller
                 );
             }
         //actualiza la etapa de la propuesta a 1
-        $collection = DB::connection('mongodb')->table('Propuestas')
-            ->where('id', $request->id_propuesta)->update(['etapa' => $request->etapa,'fecha_envio' => Carbon::now()]);  
+        $collection = DB::connection('mongodb')
+        ->collection('Propuestas')  
+        ->where('id', $request->id_propuesta) 
+        ->update([
+            'etapa' => $request->etapa,
+            'fecha_envio' => Carbon::now()
+        ]); 
         return response()->json(
             [
                 'status' => 200,
@@ -355,8 +353,10 @@ class mongoController extends Controller
     {
         try{
         //actualiza la etapa de la propuesta a 1
-        $collection = DB::connection('mongodb')->table('Propuestas')
-            ->where('id', $id_propuesta)->update(['status' => 0]);  
+        $collection=DB::connection('mongodb')
+            ->collection('Propuestas')  // Usar 'collection' en vez de 'table'
+            ->where('id', $id_propuesta) // Filtrar por 'id'
+            ->update(['status' => 0]);   
         return response()->json(
             [
                 'status' => 200,
