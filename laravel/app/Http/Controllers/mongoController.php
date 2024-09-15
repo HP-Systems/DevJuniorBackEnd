@@ -128,7 +128,7 @@ class mongoController extends Controller
 
         //por cada propuesta buscar el estado
         foreach ($cursor as $prop) {
-            $propuesta = Propuesta::where('id_mongo', $prop->id);
+            $propuesta = Propuesta::where('id_mongo', $prop->id)->get();
             $prop->propuesta = $propuesta;
             
         }
