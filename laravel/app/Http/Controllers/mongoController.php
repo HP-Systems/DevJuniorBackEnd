@@ -124,6 +124,7 @@ class mongoController extends Controller
                 
                 $propuesta = Propuesta::where('id_mongo', $dato->id)->first();
                 if ($propuesta) {
+                    dd($propuesta);
                     $proyecto = Proyecto::find($propuesta->proyecto_id);
                     dd($proyecto);
                     $dato->etapa = $propuesta->etapa;
