@@ -22,8 +22,7 @@ class mongoController extends Controller
         return $collection;
     }
     //estudiante
-    public function sleccionarProyecto(Request $request)
-    {
+    public function sleccionarProyecto(Request $request){
         try {
             $validator = Validator::make(
                 $request->all(),
@@ -40,6 +39,22 @@ class mongoController extends Controller
                    
                 ]
             );
+
+            $collection = DB::connection('mongodb')->table('Propuestas')->get();
+
+            foreach ($collection as $dato) {
+                if ($dato->estudiante_id == $request->estudiante_id && $dato->proyecto_id == $request->proyecto_id) {
+                    return response()->json(
+                        [
+                            'status' => 400,
+                            'data' => [],
+                            'msg' => 'Ya existe una propuesta para este proyecto',
+                        ],
+                        400
+                    );
+                }
+            }
+            
             if ($validator->fails()) {
                 return response()->json(
                     [
@@ -97,8 +112,7 @@ class mongoController extends Controller
         }
     }
     
-    public function historial($id)
-    {
+    public function historial($id){
         try{
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
