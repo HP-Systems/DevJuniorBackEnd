@@ -120,13 +120,7 @@ class mongoController extends Controller
         foreach ($collection as $dato) {
             if ($dato->estudiante_id == $id) {
                 
-                $propuesta = Propuesta::where('id_mongo', $dato->id)->first();
-                if ($propuesta) {
-                    $dato->etapa = $propuesta->etapa;
-                }
-
-                $matchingDocuments[] = $dato;
-                dd($matchingDocuments);
+                $cursor[] = $dato;
             }
         }
         if (empty($matchingDocuments)) {
@@ -143,7 +137,7 @@ class mongoController extends Controller
         return response()->json(
             [
                 'status' => 200,
-                'data' => $matchingDocuments,
+                'data' => $cursor,
                 'msg' => 'Historial',
             ],
             200
