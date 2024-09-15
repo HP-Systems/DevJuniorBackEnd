@@ -28,4 +28,7 @@ Route::get('/mongo', [mongoController::class, 'mongoConection']);
 
 
 Route::get('/proyectos', [ProyectosController::class, 'obtenerProyectos']);
+Route::post('/proyecto/create', [ProyectosController::class, 'crearProyecto']);
+Route::put('/proyecto/edit/{id}', [ProyectosController::class, 'editarProyecto']);
+Route::put('/proyecto/status/{id}', [ProyectosController::class, 'cambiarStatusProyecto']);
 
