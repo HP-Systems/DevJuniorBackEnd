@@ -118,15 +118,23 @@ class mongoController extends Controller
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
         
         $cursor = [];
+        //buscar las propuestas del estudiante
         foreach ($collection as $dato) {
 
             if ($dato->estudiante_id == $id) {
                 $cursor[] = $dato;
             }
+        }
+
+        //por cada propuesta buscar el estado
+        foreach ($cursor as $prop) {
+            $propuesta = Propuesta::where('id_mongo', $prop->id);
+            $prop->propuesta = $propuesta;
             
         }
 
         var_dump($cursor);
+
 
         /*
         foreach ($cursor as $prop)
