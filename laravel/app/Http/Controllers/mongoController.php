@@ -125,6 +125,10 @@ class mongoController extends Controller
             }
             
         }
+
+        var_dump($cursor);
+
+        /*
         foreach ($cursor as $prop)
         {
             $propuesta = Propuesta::where('id_mongo', $prop->id);
@@ -146,6 +150,7 @@ class mongoController extends Controller
             ],
             200
         );
+        */
         
     } catch (\Exception $e) {
         Log::error('Exception during historial: ' . $e->getMessage());
