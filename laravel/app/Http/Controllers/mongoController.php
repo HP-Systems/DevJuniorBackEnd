@@ -249,7 +249,7 @@ class mongoController extends Controller
         }
     }
 
-    public function getPropuesta($id_proyecto){
+    public function getPropuestas($id_proyecto){
         try {
             $collection = DB::connection('mongodb')->table('Propuestas')->get();
             $cursor = null;
