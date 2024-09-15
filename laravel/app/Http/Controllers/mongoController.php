@@ -199,38 +199,54 @@ class mongoController extends Controller
     }}
 
     //admin
-    public function getPropuestas($id_proyecto)
-    {
+    public function getPropuestas($id_proyecto){
         try {
-
             $collection = DB::connection('mongodb')->table('Propuestas')->get();
             $cursor = null;
+            $arrayPropuestas = [];
 
-            foreach ($collection as $dato) {
-                if ($dato->proyecto_id == $id_proyecto && $dato->etapa != 0 && $dato->status == 1) {
-                    $cursor = $dato;
-                    break;
+            foreach ($collection as $propuesta) {
+                //buscar propuestas del proyecto
+                if ($propuesta->proyecto_id == $id_proyecto && $propuesta->status == 1) {
+                    $arrayPropuestas[] = $propuesta;
                 }
             }
-            
-                if (is_null($cursor)) {
-                $collection = DB::connection('mongodb')->table('Propuestas')->get();
-                foreach ($collection as $dato) {
-                    if ($dato->proyecto_id == $id_proyecto && $dato->etapa == 0 && $dato->status == 1) {
+
+            foreach($arrayPropuestas as $propuesta){
+                //buscar si alguna ha sido seleccionada
+                $propuestaSeleccionada = Propuesta::where('id_mongo', $propuesta->id);
+                break;
+               
+
+            }
+
+            return response()->json([
+                'status' => 200,
+                'data' => $propuestaSeleccionada,
+                'msg' => 'Propuestas obtenidas exitosamente.',
+            ], 200);
+
+            //por cada propuesta
+            /*foreach ($collection as $dato) {
+                //buscar la propuesta que pertenece al proyecto 
+                if ($dato->proyecto_id == $id_proyecto) {
+
+                    //buscar la propuesta que no este pendiente y este activa
+                    //la propuesta fue asignada a a un proyecto ya 
+                    if($dato->etapa != 0 && $dato->status == 1){
+                        $cursor = $dato;
+                        break;
+                    }
+
+                    //la propuesta esta pendiente y activa
+                    if($dato->etapa == 0 && $dato->status == 1){
                         $cursor = $dato;
                         break;
                     }
                 }
-             
-                return response()->json(
-                    [
-                        'status' => 200,
-                        'data' => $cursor,
-                        'msg' => 'Propuestas encontradas',
-                    ],
-                    200
-                );
-            } elseif ($cursor->etapa == 1) {
+            }
+            
+            if ($cursor->etapa == 1) {
                 // Retorna la propuesta con la vista
                 $propuesta = $cursor;
                 $vista = DB::connection('mongodb')->table('Vistas')->get();
@@ -260,6 +276,7 @@ class mongoController extends Controller
                 ],
                 200
             );
+            */
         } catch (\Exception $e) {
             Log::error('Exception during getPropuestas: ' . $e->getMessage());
             return response()->json(
