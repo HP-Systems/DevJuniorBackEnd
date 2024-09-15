@@ -112,15 +112,8 @@ class mongoController extends Controller
 
 
         }
-        return response()->json(
-            [
-                'status' => 200,
-               'data' => $cursor,
-                'msg' => 'Propuestas encontradas',
-                'id' => $id,
-            ], 200);
         
-            if (is_null($collection)) {
+            if (is_null($cursor)) {
             $hoy = Carbon::now('America/Monterrey')->toDateString();
 
             // Realizar la consulta para obtener los proyectos
@@ -138,7 +131,7 @@ class mongoController extends Controller
                 ], 200
             );
         }
-        elseif($collection->etapa == 0)
+        elseif($cursor->etapa == 0)
         {
             return response()->json(
                 [
@@ -149,7 +142,7 @@ class mongoController extends Controller
                 200
             );
         }
-        elseif($collection->etapa == 1)
+        elseif($cursor->etapa == 1)
         {
             return response()->json(
                 [
@@ -160,7 +153,7 @@ class mongoController extends Controller
                 200
             );
         }
-        elseif($collection->etapa == 2)
+        elseif($cursor->etapa == 2)
         {
             return response()->json(
                 [
@@ -171,7 +164,7 @@ class mongoController extends Controller
                 200
             );
         }
-        elseif($collection->etapa == 3)
+        elseif($cursor->etapa == 3)
         {
             return response()->json(
                 [
@@ -251,34 +244,45 @@ class mongoController extends Controller
     public function getPropuestas($id_proyecto)
     {
         try {
-            $collection = DB::connection('mongodb')->table('Propuestas')
-                ->where('id_proyecto', $id_proyecto)
-                ->where('etapa', '!=', 0)
-                ->where('status', 1)
-                ->first();
-    
-                if (is_null($collection)) {
-                $collection = DB::connection('mongodb')->table('Propuestas')
-                    ->where('id_proyecto', $id_proyecto)
-                    ->where('etapa', 0)
-                    ->where('status', 1)
-                    ->get();
+
+            $collection = DB::connection('mongodb')->table('Propuestas')->get();
+            $cursor = null;
+
+            foreach ($collection as $dato) {
+                if ($dato->id_proyecto == $id_proyecto && $dato->etapa != 0 && $dato->status == 1) {
+                    $cursor = $dato;
+                    break;
+                }
+            }
+            
+                if (is_null($cursor)) {
+                $collection = DB::connection('mongodb')->table('Propuestas')->get();
+                foreach ($collection as $dato) {
+                    if ($dato->id_proyecto == $id_proyecto && $dato->etapa == 0 && $dato->status == 1) {
+                        $cursor = $dato;
+                        break;
+                    }
+                }
+             
                 return response()->json(
                     [
                         'status' => 200,
-                        'data' => $collection,
+                        'data' => $cursor,
                         'msg' => 'Propuestas encontradas',
                     ],
                     200
                 );
-            } elseif ($collection->first()->etapa == 1) {
+            } elseif ($cursor->etapa == 1) {
                 // Retorna la propuesta con la vista
-                $propuesta = $collection->first();
-                $vista = DB::connection('mongodb')->table('Vistas')
-                    ->where('id_propuesta', $propuesta->_id)
-                    ->first();
-    
-                $propuesta->vista = $vista;
+                $propuesta = $cursor;
+                $vista = DB::connection('mongodb')->table('Vistas')->get();
+                foreach ($vista as $dato) {
+                    if ($dato->id_propuesta == $propuesta->id) {
+                        $propuesta->vista = $dato;
+                        break;
+                    }
+                }
+                    
     
                 return response()->json(
                     [
@@ -293,7 +297,7 @@ class mongoController extends Controller
             return response()->json(
                 [
                     'status' => 200,
-                    'data' => $collection,
+                    'data' => $cursor,
                     'msg' => 'Propuestas encontradas',
                 ],
                 200
@@ -336,18 +340,30 @@ class mongoController extends Controller
                     400
                 );
             }
+        $cursor = null;
         //actualiza la etapa de la propuesta a 1
         $collection = DB::connection('mongodb')
-        ->collection('Propuestas')  
-        ->where('id', $request->id_propuesta) 
-        ->update([
-            'etapa' => $request->etapa,
-            'fecha_envio' => Carbon::now()
-        ]); 
+        ->collection('Propuestas')->get();
+        foreach($collection as $dato)
+        {
+            if($dato->id == $request->id_propuesta)
+            {
+                //inserta la etapa y la fecha de envio
+                $dato->update([
+                    'etapa' => $request->etapa,
+                    'fecha_envio' => Carbon::now()
+                ]);
+                
+
+                $cursor = $dato;
+                break;
+            }
+        }
+        
         return response()->json(
             [
                 'status' => 200,
-                'data' => $collection,
+                'data' => $cursor,
                 'msg' => 'Etapa actualizada',
             ],
             200
@@ -370,13 +386,26 @@ class mongoController extends Controller
         try{
         //actualiza la etapa de la propuesta a 1
         $collection=DB::connection('mongodb')
-            ->collection('Propuestas')  // Usar 'collection' en vez de 'table'
-            ->where('id', $id_propuesta) // Filtrar por 'id'
-            ->update(['status' => 0]);   
+            ->collection('Propuestas')->get();
+            
+           foreach($collection as $dato)
+           {
+                if($dato->id == $id_propuesta)
+                {
+                     //inserta la etapa y la fecha de envio
+                     $dato->update([
+                          'status' => 0,
+                     ]);
+                     
+                     $cursor = $dato;
+                     break;
+                }
+           } 
+              
         return response()->json(
             [
                 'status' => 200,
-                'data' => $collection,
+                'data' => $cursor,
                 'msg' => 'Propuesta cancelada',
             ],
             200
