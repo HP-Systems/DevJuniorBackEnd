@@ -116,6 +116,7 @@ class mongoController extends Controller
         try{
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
+        dd($collection);
         $cursor = null;
         foreach ($collection as $dato) {
             if ($dato->estudiante_id == $id) {
