@@ -246,14 +246,7 @@ class UsersController extends Controller
             //se direcciona a la vista de 2FA para la introducir el código
             $user->status = 1;
             $user->save();
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $user,
-                    'msg' => 'Usuario confirmado con exito.',
-                    'error' => []
-                ], 200
-            );
+            return view('verificado');
         } catch (\Exception $e) {
             Log::error('Exception during confirmEmail: ' . $e->getMessage());
             return response()->json(

@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/verificado', function () {
+    return view('verificado');
+});
 
 Route::get('/email', function () {return view('email');})->name("email");
 Route::get('/confirm/{id}', [UsersController::class, 'confirmEmail'])->name('confirm')->where('id', '[0-9]+');
