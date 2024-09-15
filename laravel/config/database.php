@@ -95,7 +95,7 @@ return [
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_URI', 'mongodb+srv://nadia:SGxJfu710JySObEF@cluster0.0ju6n9v.mongodb.net/'),
-            'database' => 'sakilaa',
+            'database' => 'DevJunior',
     ],
 
     ],
