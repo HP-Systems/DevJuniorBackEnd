@@ -7,9 +7,9 @@ use App\Mail\SendMailActivation;
 use App\Models\Empresa;
 use App\Models\Estudiante;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,6 +48,30 @@ class UsersController extends Controller
 
             $tipo_usuario = $request->tipo_usuario;
             if($tipo_usuario == 1){
+                $validate = Validator::make(
+                    $request->all(),
+                    [
+                        "nombre" => "required",
+                        "apellido" => "required",
+                        "telefono" => "required",
+                        "fecha_nacimiento" => "required",
+                        "universidad" => "required",
+                        "clave_estudiante" => "required",
+                        "periodo" => "required",
+                        "n_periodo" => "required",
+                        "foto_credencial" => "required",
+                    ]
+                );
+                if($validate->failed()){
+                    return response()->json(
+                        [
+                            'status' => 400,
+                            'data' => [],
+                            'msg' => 'Error de validación',
+                            'error' => $validate->errors()
+                        ], 400
+                    );
+                }
                 $persona = Estudiante::create([
                     "nombre" => $request->nombre,
                     "apellido" => $request->apellido,
@@ -60,6 +84,27 @@ class UsersController extends Controller
                     "foto_credencial" => $request->foto_credencial,
                 ]);
             } else{
+               $validate = Validator::make(
+                    $request->all(),
+                    [
+                        "nombre" => "required",
+                        "sector" => "required",
+                        "ciudad" => "required",
+                        "estado" => "required",
+                        "descripcion" => "required",
+                        "telefono" => "required",
+                    ]
+                );
+                if($validate->failed()){
+                    return response()->json(
+                        [
+                            'status' => 400,
+                            'data' => [],
+                            'msg' => 'Error de validación',
+                            'error' => $validate->errors()
+                        ], 400
+                    );
+                }
                 $persona = Empresa::create([
                     "nombre" => $request->nombre,
                     "sector" => $request->sector,
@@ -95,7 +140,7 @@ class UsersController extends Controller
                     'status' => 500,
                     'data' => [],
                     'msg' => 'Error de servidor.',
-                    'error' => $e->getMessage(),
+                    
                 ], 500
             );
         }
@@ -163,7 +208,7 @@ class UsersController extends Controller
                     'status' => 500,
                     'data' => [],
                     'msg' => 'Error de servidor.',
-                    'error' => $e->getMessage(),
+                    
                 ], 500
             );
         }
@@ -216,7 +261,7 @@ class UsersController extends Controller
                     'status' => 500,
                     'data' => [],
                     'msg' => 'Error de servidor.',
-                    'error' => $e->getMessage(),
+                    
                 ], 500
             );
         }

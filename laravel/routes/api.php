@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\mongoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
@@ -22,4 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [UsersController::class, 'register']);
 Route::post('/login', [UsersController::class, 'login']);
 
+Route::get('/mongo', [mongoController::class, 'mongoConection']);
 
