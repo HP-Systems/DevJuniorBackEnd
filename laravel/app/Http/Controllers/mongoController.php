@@ -214,7 +214,7 @@ class mongoController extends Controller
 
             foreach($arrayPropuestas as $propuesta){
                 //buscar si alguna ha sido seleccionada
-                $propuestaSeleccionada = Propuesta::where('id_mongo', $propuesta->id)->first();
+                $propuestaSeleccionada = Propuesta::where('id_mongo', $propuesta->id);
                 break;
                
 
