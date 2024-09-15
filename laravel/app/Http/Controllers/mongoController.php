@@ -96,13 +96,20 @@ class mongoController extends Controller
         }
     }
     
-    public function historial($estudiante_id)
+    public function historial($id)
     {
         try{
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')
-            ->where('estudiante_id', $estudiante_id)->where('status', 1)->first();
+            ->where('estudiante_id', $id)->where('status', 1)->first();
 
+        return response()->json(
+            [
+                'status' => 200,
+                'data' => $collection,
+                'msg' => 'Propuestas encontradas',
+                'id' => $id,
+            ], 200);
         
             if (is_null($collection)) {
             $hoy = Carbon::now('America/Monterrey')->toDateString();
