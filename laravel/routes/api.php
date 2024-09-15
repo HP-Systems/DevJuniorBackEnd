@@ -4,6 +4,7 @@ use App\Http\Controllers\mongoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ProyectosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,7 @@ Route::post('/register', [UsersController::class, 'register']);
 Route::post('/login', [UsersController::class, 'login']);
 
 Route::get('/mongo', [mongoController::class, 'mongoConection']);
+
+
+Route::get('/proyectos', [ProyectosController::class, 'obtenerProyectos']);
 
