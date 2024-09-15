@@ -306,10 +306,11 @@ class mongoController extends Controller
         {
             if($dato->id == $request->id_propuesta)
             {
-                $cursor=Propuesta::create([
-                    'etapa' => $request->etapa,
-                    'id_mongo'=>$request->id_propuesta
-                ]);
+                $propuesta = Propuesta::where('id_mongo', $dato->id)->first();
+                if($propuesta){
+                    $propuesta->etapa = $request->etapa;
+                    $propuesta->save();
+                }                
             }
         }
         
