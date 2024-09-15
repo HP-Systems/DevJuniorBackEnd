@@ -343,7 +343,7 @@ class mongoController extends Controller
         $cursor = null;
         //actualiza la etapa de la propuesta a 1
         $collection = DB::connection('mongodb')
-        ->collection('Propuestas')->get();
+        ->table('Propuestas')->get();
         foreach($collection as $dato)
         {
             if($dato->id == $request->id_propuesta)
@@ -386,7 +386,7 @@ class mongoController extends Controller
         try{
         //actualiza la etapa de la propuesta a 1
         $collection=DB::connection('mongodb')
-            ->collection('Propuestas')->get();
+            ->table('Propuestas')->get();
             
            foreach($collection as $dato)
            {
