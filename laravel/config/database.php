@@ -93,16 +93,10 @@ return [
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
         'mongodb' => [
-            'driver'   => 'mongodb',
-            'host'     => env('DB_HOST2', '127.0.0.1'),
-            'port'     => env('DB_PORT2', 27017),
-            'database' => env('DB_DATABASE2'),
-            'username' => env('DB_USERNAME2'),
-            'password' => env('DB_PASSWORD2'),
-            'options'  => [
-                'database' => 'admin' // Default MongoDB database for authentication
-            ]
-        ],
+            'driver' => 'mongodb',
+            'dsn' => env('DB_URI', 'mongodb+srv://nadia:SGxJfu710JySObEF@cluster0.0ju6n9v.mongodb.net/'),
+            'database' => 'myappdb',
+    ],
 
     ],
 
