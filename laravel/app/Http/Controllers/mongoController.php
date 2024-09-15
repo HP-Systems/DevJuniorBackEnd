@@ -113,6 +113,16 @@ class mongoController extends Controller
                 $matchingDocuments[] = $dato;
             }
         }
+        if (empty($matchingDocuments)) {
+            return response()->json(
+                [
+                    'status' => 404,
+                    'data' => [],
+                    'msg' => 'No se encontraron propuestas',
+                ],
+                404
+            );
+        }
 
         return response()->json(
             [
