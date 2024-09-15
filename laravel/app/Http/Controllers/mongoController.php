@@ -212,17 +212,27 @@ class mongoController extends Controller
                 }
             }
 
+            $propuestaFinal  = null;
+            $propuestaFinal = $arrayPropuestas;
+
             foreach($arrayPropuestas as $propuesta){
                 //buscar si alguna ha sido seleccionada
-                $propuestaSeleccionada = Propuesta::where('id_mongo', $propuesta->id);
-                break;
-               
+                $propuestaSeleccionada = Propuesta::where('id_mongo', $propuesta->id)->first();
 
+                if ($propuestaSeleccionada) {
+                    $propuestaFinal = $propuesta;
+                    break; 
+                }
             }
+
+            $data = [
+                'Propuestas' => $propuestaFinal,
+                'Vistas' => $propuestaSeleccionada,
+            ];
 
             return response()->json([
                 'status' => 200,
-                'data' => $propuestaSeleccionada,
+                'data' => $data,
                 'msg' => 'Propuestas obtenidas exitosamente.',
             ], 200);
 
