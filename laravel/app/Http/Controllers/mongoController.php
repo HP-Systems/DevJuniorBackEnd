@@ -113,6 +113,16 @@ class mongoController extends Controller
 
 
         }
+
+        return response()->json(
+            [
+                'status' => 200,
+                'data' => $cursor,
+                'msg' => 'Historial encontrado',
+            ],
+            200
+        );
+
         
             if (is_null($cursor)) {
             $hoy = Carbon::now('America/Monterrey')->toDateString();
@@ -132,50 +142,7 @@ class mongoController extends Controller
                 ], 200
             );
         }
-        elseif($cursor->etapa == 0)
-        {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $collection,
-                    'msg' => 'Propuesta en espera de aceptación',
-                ],
-                200
-            );
-        }
-        elseif($cursor->etapa == 1)
-        {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $collection,
-                    'msg' => 'Propuesta en espera de vista y/o corrección',
-                ],
-                200
-            );
-        }
-        elseif($cursor->etapa == 2)
-        {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $collection,
-                    'msg' => 'Propuesta en etapa de desarrollo',
-                ],
-                200
-            );
-        }
-        elseif($cursor->etapa == 3)
-        {
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $collection,
-                    'msg' => 'Propuesta en etapa de finalización',
-                ],
-                200
-            );
-        }
+       
     } catch (\Exception $e) {
         Log::error('Exception during historial: ' . $e->getMessage());
         return response()->json(
