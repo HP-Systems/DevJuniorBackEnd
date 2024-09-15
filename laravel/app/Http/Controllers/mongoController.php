@@ -128,6 +128,7 @@ class mongoController extends Controller
         foreach ($cursor as $prop)
         {
             $propuesta = Propuesta::where('id_mongo', $prop->id);
+            dd($propuesta);
             $prop->propuesta = $propuesta;
         }
         foreach ($cursor as $pro)
