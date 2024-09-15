@@ -12,7 +12,7 @@ class mongoController extends Controller
 
     {
         
-        $collection = DB::connection('mongodb')->collection('actor')->get();
+        $collection = DB::connection('mongodb')->table('actor')->get();
         return $collection;
     }
 }
