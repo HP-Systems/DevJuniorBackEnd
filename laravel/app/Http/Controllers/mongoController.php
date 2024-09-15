@@ -206,19 +206,23 @@ class mongoController extends Controller
             $arrayPropuestas = [];
 
             foreach ($collection as $propuesta) {
-                if ($propuesta->proyecto_id == $id_proyecto) {
-                    $arrayPropuestas[] = $propuesta; // Agregar propuesta al arreglo
+                //buscar propuestas del proyecto
+                if ($propuesta->proyecto_id == $id_proyecto && $propuesta->status == 1) {
+                    $arrayPropuestas[] = $propuesta;
                 }
             }
 
             foreach($arrayPropuestas as $propuesta){
+                //buscar si alguna ha sido seleccionada
+                $propuestaSeleccionada = Propuesta::where('id_mongo', $propuesta->id)->first();
+                break;
                
 
             }
 
             return response()->json([
                 'status' => 200,
-                'data' => $arrayPropuestas,
+                'data' => $propuestaSeleccionada,
                 'msg' => 'Propuestas obtenidas exitosamente.',
             ], 200);
 
