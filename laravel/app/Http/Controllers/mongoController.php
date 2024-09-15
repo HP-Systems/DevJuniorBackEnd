@@ -105,6 +105,7 @@ class mongoController extends Controller
         $cursor = null;
         foreach ($collection as $dato) {
             if ($dato->estudiante_id == $id) {
+                dd($dato);
                 $propuesta = Propuesta::where('id_mongo', $dato->_id)->first();
                 if ($propuesta) {
                     $dato->etapa = $propuesta->etapa;
