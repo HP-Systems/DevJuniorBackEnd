@@ -118,23 +118,24 @@ class mongoController extends Controller
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
         
         $cursor = [];
+        //buscar las propuestas del estudiante
         foreach ($collection as $dato) {
 
             if ($dato->estudiante_id == $id) {
                 $cursor[] = $dato;
             }
-            
         }
-        foreach ($cursor as $prop)
-        {
-            $propuesta = Propuesta::where('id_mongo', $prop->id);
-            
+
+        //por cada propuesta buscar el estado
+        foreach ($cursor as $prop) {
+            $propuesta = Propuesta::where('id_mongo', $prop->id)->get();
             $prop->propuesta = $propuesta;
+            
         }
-        dd($cursor);
+        
         foreach ($cursor as $pro)
         {
-            $proyecto = Proyecto::where('id', $pro->proyecto_id);
+            $proyecto = Proyecto::where('id', $pro->proyecto_id)->get();
             $prop->proyecto = $proyecto;
         }
 
@@ -146,7 +147,6 @@ class mongoController extends Controller
             ],
             200
         );
-        
     } catch (\Exception $e) {
         Log::error('Exception during historial: ' . $e->getMessage());
         return response()->json(
