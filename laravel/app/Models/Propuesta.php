@@ -19,7 +19,9 @@ class Propuesta extends Model
         'id_mongo',
         'etapa',
         'fecha_envio',
-        'URL_propuesta'
+        'URL_propuesta',
+        'id_mongo',
+        'status'
     ];
 
     public function estudiante()

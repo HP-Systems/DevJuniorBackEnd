@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('etapa');
             $table->date('fecha_envio');
             $table->text('URL_propuesta');
-
-            $table->foreign('estudiante_id')->references('id')->on('estudiantes');
-            $table->foreign('proyecto_id')->references('id')->on('proyectos');
+            $table->unsignedBigInteger('id_mongo');
+            $table->integer('status');
+            
             $table->timestamps();
         });
     }
