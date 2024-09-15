@@ -116,26 +116,15 @@ class mongoController extends Controller
         try{
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
-        dd($collection);
-        $cursor = null;
+        
+        $cursor = [];
         foreach ($collection as $dato) {
-            if ($dato->estudiante_id == $id) {
-                
-                $cursor=$dato;
-                break;
-            }
-        }
-        if (empty($matchingDocuments)) {
-            return response()->json(
-                [
-                    'status' => 404,
-                    'data' => [],
-                    'msg' => 'No se encontraron propuestas',
-                ],
-                404
-            );
-        }
 
+            if ($dato->estudiante_id == $id) {
+                $cursor[] = $dato;
+            }
+            
+        }
         return response()->json(
             [
                 'status' => 200,
