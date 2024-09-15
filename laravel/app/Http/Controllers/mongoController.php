@@ -118,31 +118,11 @@ class mongoController extends Controller
             [
                 'status' => 200,
                 'data' => $matchingDocuments,
-                'msg' => 'Historial encontrado',
+                'msg' => 'Historial',
             ],
             200
         );
-
         
-            if (is_null($cursor)) {
-            $hoy = Carbon::now('America/Monterrey')->toDateString();
-
-            // Realizar la consulta para obtener los proyectos
-            $proyectos = Proyecto::where('fecha_creacion', '<=', $hoy)
-                ->where('fecha_limite', '>=', $hoy) 
-                ->where('status', 1)
-                ->get();
-
-            return response()->json(
-                [
-                    'status' => 200,
-                    'data' => $proyectos,
-                    'msg' => 'Proyectos disponibles',
-                    'error' => []
-                ], 200
-            );
-        }
-       
     } catch (\Exception $e) {
         Log::error('Exception during historial: ' . $e->getMessage());
         return response()->json(
