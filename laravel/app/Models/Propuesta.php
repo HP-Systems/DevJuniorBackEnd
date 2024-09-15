@@ -16,6 +16,7 @@ class Propuesta extends Model
         'estudiante_id',
         'proyecto_id',
         'descripcion',
+        'id_mongo',
         'etapa',
         'fecha_envio',
         'URL_propuesta'

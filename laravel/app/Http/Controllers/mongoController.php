@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Propuesta;
 use App\Models\Proyecto;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -348,15 +349,10 @@ class mongoController extends Controller
         {
             if($dato->id == $request->id_propuesta)
             {
-                //inserta la etapa y la fecha de envio
-                $dato->insert([
+                $cursor=Propuesta::create([
                     'etapa' => $request->etapa,
-                    'fecha_envio' => Carbon::now(),
+                    'id_mongo'=>$request->id_propuesta
                 ]);
-                
-
-                $cursor = $dato;
-                break;
             }
         }
         
@@ -381,31 +377,28 @@ class mongoController extends Controller
     }
     }
     
-    public function cancelarPropuesta($id_propuesta)
+    public function cancelarPropuesta($id_mongo)
     {
         try{
-        //actualiza la etapa de la propuesta a 1
-        $collection=DB::connection('mongodb')
-            ->table('Propuestas')->get();
-            
-           foreach($collection as $dato)
-           {
-                if($dato->id == $id_propuesta)
-                {
-                     //inserta la etapa y la fecha de envio
-                     $dato->update([
-                          'status' => 0,
-                     ]);
-                     
-                     $cursor = $dato;
-                     break;
-                }
-           } 
+
+        $propuesta = Propuesta::find($id_mongo);
+        if(!$propuesta){
+            return response()->json(
+                [
+                    'status' => 404,
+                    'data' => [],
+                    'msg' => 'Propuesta no encontrada',
+                ],
+                404
+            );
+        }
               
+        $propuesta->status = 0;
+        $propuesta->save();
         return response()->json(
             [
                 'status' => 200,
-                'data' => $cursor,
+                'data' => $propuesta,
                 'msg' => 'Propuesta cancelada',
             ],
             200
