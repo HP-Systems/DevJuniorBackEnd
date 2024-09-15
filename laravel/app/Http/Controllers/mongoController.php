@@ -102,8 +102,8 @@ class mongoController extends Controller
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
 
-        $cursor=$collection->find (['estudiante_id' => $id, 'status' => 1]);
-        
+        $cursor=$collection->findOne(['estudiante_id' => $id, 'status' => 1]);
+        var_dump($cursor);
         return response()->json(
             [
                 'status' => 200,
