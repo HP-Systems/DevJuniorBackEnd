@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-
+use PhpParser\Node\Stmt\Foreach_;
 
 class mongoController extends Controller
 {
@@ -103,21 +103,20 @@ class mongoController extends Controller
         //obtener las propuestas a las que el estudiante pertenece
         $collection = DB::connection('mongodb')->table('Propuestas')->get();
         $cursor = null;
-        foreach($collection as $dato)
-        {
-            if($dato->estudiante_id == $id)
-            {
-                $cursor = $dato;
-                break;
+        foreach ($collection as $dato) {
+            if ($dato->estudiante_id == $id) {
+                $propuesta = Propuesta::where('id_mongo', $dato->_id)->first();
+                if ($propuesta) {
+                    $dato->etapa = $propuesta->etapa;
+                }
+                $matchingDocuments[] = $dato;
             }
-
-
         }
 
         return response()->json(
             [
                 'status' => 200,
-                'data' => $cursor,
+                'data' => $matchingDocuments,
                 'msg' => 'Historial encontrado',
             ],
             200
