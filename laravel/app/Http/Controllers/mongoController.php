@@ -9,8 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-
-
+use Jenssegers\Mongodb\Facades\MongoDB;
 class mongoController extends Controller
 {
     public function mongoConection()
@@ -349,7 +348,7 @@ class mongoController extends Controller
             if($dato->id == $request->id_propuesta)
             {
                 //inserta la etapa y la fecha de envio
-                $dato->update([
+                $dato->updateOne([
                     'etapa' => $request->etapa,
                     'fecha_envio' => Carbon::now()
                 ]);
