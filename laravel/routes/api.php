@@ -26,6 +26,8 @@ Route::post('/login', [UsersController::class, 'login']);
 Route::get('/mongo', [mongoController::class, 'mongoConection']);
 
 Route::get('/proyectos', [ProyectosController::class, 'obtenerProyectos']);
+Route::get('/proyectos/empresa/{id}', [ProyectosController::class, 'obtenerProyectosEmpresa']);
+Route::get('/proyecto/{id}', [ProyectosController::class, 'obtenerInfoProyecto']);
 Route::post('/proyecto/create', [ProyectosController::class, 'crearProyecto']);
 Route::put('/proyecto/edit/{id}', [ProyectosController::class, 'editarProyecto']);
 Route::put('/proyecto/status/{id}', [ProyectosController::class, 'cambiarStatusProyecto']);

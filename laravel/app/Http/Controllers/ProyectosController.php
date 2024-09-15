@@ -41,6 +41,63 @@ class ProyectosController extends Controller
             );
         }
     }
+
+    public function obtenerProyectosEmpresa($id){
+        try {
+            $hoy = Carbon::now('America/Monterrey')->toDateString();
+
+            // Realizar la consulta para obtener los proyectos
+            $proyectos = Proyecto::where('fecha_creacion', '<=', $hoy)
+                ->where('fecha_limite', '>=', $hoy) 
+                ->where('status', 1)
+                ->where('empresa_id', $id)
+                ->get();
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $proyectos,
+                    'msg' => 'Proyectos de la empresa obtenidos correctamente.',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            Log::error('Exception during obtenerProyectosEmpresa: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error al obtener los proyectos.',
+                    'error' => $e->getMessage()
+                ], 500
+            );
+        }
+    }
+
+    public function obtenerInfoProyecto($id){
+        try {
+            $proyecto = Proyecto::findOrFail($id);
+
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $proyecto,
+                    'msg' => 'Proyectos de la empresa obtenidos correctamente.',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            Log::error('Exception during obtenerProyectosEmpresa: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error al obtener los proyectos.',
+                    'error' => $e->getMessage()
+                ], 500
+            );
+        }
+    }
     
     public function crearProyecto(Request $request){
         try{
