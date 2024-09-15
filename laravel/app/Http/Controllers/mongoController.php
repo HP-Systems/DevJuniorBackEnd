@@ -249,7 +249,7 @@ class mongoController extends Controller
             $cursor = null;
 
             foreach ($collection as $dato) {
-                if ($dato->id_proyecto == $id_proyecto && $dato->etapa != 0 && $dato->status == 1) {
+                if ($dato->proyecto_id == $id_proyecto && $dato->etapa != 0 && $dato->status == 1) {
                     $cursor = $dato;
                     break;
                 }
