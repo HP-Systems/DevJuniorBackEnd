@@ -103,6 +103,14 @@ class mongoController extends Controller
         $collection = DB::connection('mongodb')->table('Propuestas')
             ->where('estudiante_id', $estudiante_id)->where('status', 1)->get();
 
+        return response()->json(
+            [
+                'status' => 200,
+                'data' => $collection,
+                'msg' => 'Historial de propuestas',
+            ],
+            200
+        );
         if ($collection->isEmpty()) {
             $hoy = Carbon::now('America/Monterrey')->toDateString();
 
