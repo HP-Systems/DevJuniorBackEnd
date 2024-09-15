@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\sendMail;
+use App\Mail\SendMailActivation;
 use App\Models\Empresa;
 use App\Models\Estudiante;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
@@ -42,6 +45,7 @@ class UsersController extends Controller
                 );
             }
 
+
             $tipo_usuario = $request->tipo_usuario;
             if($tipo_usuario == 1){
                 $persona = Estudiante::create([
@@ -73,12 +77,14 @@ class UsersController extends Controller
                 "tipo_usuario" => $tipo_usuario,
                 "status" => 0
             ]);
+            $url = URL::temporarySignedRoute('confirm',now()->addMinute(5),['id' => $user->id]);
+            sendMail::dispatch($url, $user);
 
             return response()->json(
                 [
                     'status' => 200,
                     'data' => $user,
-                    'msg' => 'Usuario creado con exito.',
+                    'msg' => 'Verifica tu correo para confirmar tu cuenta.',
                     'error' => []
                 ], 200
             );
@@ -129,11 +135,13 @@ class UsersController extends Controller
             }
 
             if($user->status == 0){
+                $url = URL::temporarySignedRoute('confirm',now()->addMinute(5),['id' => $user->id]);
+                sendMail::dispatch($url, $user);
                 return response()->json(
                     [
                         'status' => 403,
                         'data' => [],
-                        'msg' => 'Cuenta desactivada. Contacta al administrador.',
+                        'msg' => 'Cuenta desactivada.Verifique su correo para activarla.',
                         'error' => []
                     ], 403
                 );
@@ -160,6 +168,58 @@ class UsersController extends Controller
             );
         }
 
+    }
+
+    public function confirmEmail(Request $request,$id){
+        try{
+          
+            //si la ruta no está firmada, redirige al formulario de login con un error
+            if (!$request->hasValidSignature()) {
+                return response()->json(
+                    [
+                        'status' => 403,
+                        'data' => [],
+                        'msg' => 'Invalid signature',
+                        'error' => []
+                    ], 403
+                );
+            }
+            //busca el usuario en la base de datos mediante el id
+            $user = User::find($id);
+            //si no encuentra el usuario, redirige al formulario de login con un error
+            if (!$user) {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'data' => [],
+                        'msg' => 'User not found',
+                        'error' => []
+                    ], 404
+                );
+            }
+            //se verifica el usuario y se guarda en la base de datos
+            //se direcciona a la vista de 2FA para la introducir el código
+            $user->status = 1;
+            $user->save();
+            return response()->json(
+                [
+                    'status' => 200,
+                    'data' => $user,
+                    'msg' => 'Usuario confirmado con exito.',
+                    'error' => []
+                ], 200
+            );
+        } catch (\Exception $e) {
+            Log::error('Exception during confirmEmail: ' . $e->getMessage());
+            return response()->json(
+                [
+                    'status' => 500,
+                    'data' => [],
+                    'msg' => 'Error de servidor.',
+                    'error' => $e->getMessage(),
+                ], 500
+            );
+        }
     }
 
 
