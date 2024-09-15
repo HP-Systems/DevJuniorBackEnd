@@ -132,21 +132,10 @@ class mongoController extends Controller
             $prop->propuesta = $propuesta;
             
         }
-
-        var_dump($cursor);
-
-
-        /*
-        foreach ($cursor as $prop)
-        {
-            $propuesta = Propuesta::where('id_mongo', $prop->id);
-            
-            $prop->propuesta = $propuesta;
-        }
-        dd($cursor);
+        
         foreach ($cursor as $pro)
         {
-            $proyecto = Proyecto::where('id', $pro->proyecto_id);
+            $proyecto = Proyecto::where('id', $pro->proyecto_id)->get();
             $prop->proyecto = $proyecto;
         }
 
@@ -158,8 +147,6 @@ class mongoController extends Controller
             ],
             200
         );
-        */
-        
     } catch (\Exception $e) {
         Log::error('Exception during historial: ' . $e->getMessage());
         return response()->json(
