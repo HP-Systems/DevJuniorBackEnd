@@ -120,7 +120,8 @@ class mongoController extends Controller
         foreach ($collection as $dato) {
             if ($dato->estudiante_id == $id) {
                 
-                $cursor[] = $dato;
+                $cursor=$dato;
+                break;
             }
         }
         if (empty($matchingDocuments)) {
