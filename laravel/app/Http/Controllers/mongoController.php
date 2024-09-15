@@ -214,6 +214,7 @@ class mongoController extends Controller
 
             $propuestaFinal  = null;
             $propuestaFinal = $arrayPropuestas;
+            $propuestaSeleccionada = [];
 
             foreach($arrayPropuestas as $propuesta){
                 //buscar si alguna ha sido seleccionada
