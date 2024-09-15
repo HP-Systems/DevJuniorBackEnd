@@ -125,6 +125,17 @@ class mongoController extends Controller
             }
             
         }
+        foreach ($cursor as $prop)
+        {
+            $propuesta = Propuesta::where('id_mongo', $prop->id);
+            $prop->propuesta = $propuesta;
+        }
+        foreach ($cursor as $pro)
+        {
+            $proyecto = Proyecto::where('id', $pro->proyecto_id);
+            $prop->proyecto = $proyecto;
+        }
+
         return response()->json(
             [
                 'status' => 200,
